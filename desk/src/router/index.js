@@ -171,6 +171,13 @@ const routes = [
         component: () => import("@/pages/desk/customer/CustomerList.vue"),
       },
       {
+        path: "customers/:ticketId",
+        name: "CustomerAgent",
+        component: () =>
+          import(`@/pages/${handleMobileView("CustomerAgent")}.vue`),
+        props: true,
+      },
+      {
         path: "contacts",
         name: AGENT_PORTAL_CONTACT_LIST,
         component: () => import("@/pages/desk/contact/ContactList.vue"),

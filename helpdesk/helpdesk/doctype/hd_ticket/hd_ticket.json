@@ -69,7 +69,6 @@
    "options": "fa fa-flag"
   },
   {
-   "bold": 1,
    "fieldname": "subject",
    "fieldtype": "Data",
    "in_global_search": 1,
@@ -410,7 +409,7 @@
  "icon": "fa fa-issue",
  "idx": 61,
  "links": [],
- "modified": "2023-11-23 13:44:59.105648",
+ "modified": "2024-09-11 16:13:00.755193",
  "modified_by": "Administrator",
  "module": "Helpdesk",
  "name": "HD Ticket",

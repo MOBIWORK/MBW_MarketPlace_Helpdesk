@@ -119,6 +119,7 @@ const send = createResource({
 });
 
 function handleClose() {
+  // showFeedbackDialog.value = true;
   if (showFeedback.value) {
     showFeedbackDialog.value = true;
   } else {
