@@ -1,0 +1,117 @@
+<template>
+  <div class="flw-full flex-col pb-[20px] md:px-[10px]">
+    <!-- Overview Section -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="border bg-white p-4">
+        <h2 class="text-lg font-bold">Tickets created</h2>
+        <p class="text-2xl font-semibold">30</p>
+      </div>
+      <div class="border bg-white p-4">
+        <h2 class="text-lg font-bold">Open tickets</h2>
+        <p class="text-2xl font-semibold">3</p>
+      </div>
+      <div class="border bg-white p-4">
+        <h2 class="text-lg font-bold">Overdue tickets</h2>
+        <p class="text-2xl font-semibold text-red-500">1</p>
+      </div>
+    </div>
+
+    <!-- Tickets Table -->
+    <div class="w-full flex-col pt-[20px]">
+      <div class="border p-4">
+        <p class="">All tickets ( {{ allTicketsCount }} )</p>
+      </div>
+      <div class="border p-4">
+        <ListView
+          class="h-auto"
+          :columns="columns"
+          :rows="rows"
+          :options="{
+            emptyState: {
+              title: 'No Data',
+              description: 'No data available',
+            },
+            getRowRoute: (row) => ({
+              name: 'TicketAgent',
+              params: { ticketId: row.name },
+            }),
+            showTooltip: true,
+            resizeColumn: true,
+          }"
+          row-key="name"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ListView, Avatar, createResource } from "frappe-ui";
+import { ref, h, computed } from "vue";
+import { MultipleAvatar } from "@/components";
+
+const list_data_all_tickets = ref([]);
+const props = defineProps({
+  user_infor: {
+    type: String,
+    required: true,
+  },
+});
+const data = createResource({
+  url: "helpdesk.override.api.get_data_all_tickets",
+  params: {
+    name: props.user_infor,
+  },
+  auto: true,
+  onSuccess: (data) => {
+    list_data_all_tickets.value = data;
+  },
+});
+const allTicketsCount = computed(() => list_data_all_tickets.value.length);
+const columns = [
+  {
+    label: "ID",
+    key: "id",
+    width: "50px",
+  },
+  {
+    label: "Title",
+    key: "title",
+  },
+  {
+    label: "Created",
+    key: "created",
+    width: "250px",
+  },
+  {
+    label: "Status",
+    key: "status",
+    width: "100px",
+  },
+  {
+    label: "Priority",
+    key: "priority",
+    width: "100px",
+  },
+  {
+    label: "Assignee",
+    key: "assigns",
+    prefix: ({ row }) => {
+      let list_assign = JSON.parse(row.assign) || [];
+      let avatars = [];
+      if (list_assign) {
+        avatars = list_assign.map((item) => ({
+          image: null,
+          label: item,
+          name: item,
+        }));
+      }
+
+      return h(MultipleAvatar, {
+        avatars: avatars,
+      });
+    },
+  },
+];
+const rows = list_data_all_tickets;
+</script>
