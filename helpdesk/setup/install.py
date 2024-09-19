@@ -8,7 +8,8 @@ from .file import create_helpdesk_folder
 from .ticket_feedback import create_ticket_feedback_options
 from .ticket_type import create_fallback_ticket_type, create_ootb_ticket_types
 from .welcome_ticket import create_welcome_ticket
-
+from helpdesk.search import create_dynamic_scheduler_events
+from helpdesk.hooks import scheduler_events
 
 def before_install():
     add_support_redirect_to_tickets()
@@ -30,7 +31,12 @@ def after_install():
     create_ticket_feedback_options()
     add_property_setter()
 
+def add_defaut_auto_send_mail():
+    # Tạo dynamic scheduler từ kết quả SQL query và thêm vào scheduler_events gốc
+    dynamic_schedulers = create_dynamic_scheduler_events()
 
+    # Kết hợp các dynamic scheduler cron vào scheduler_events hiện có
+    scheduler_events.update(dynamic_schedulers)
 def add_support_redirect_to_tickets():
     website_settings = frappe.get_doc("Website Settings")
 
@@ -286,3 +292,9 @@ def add_property_setter():
         doc.property_type = "Data"
         doc.value = "email_id"
         doc.insert()
+
+# Tạo dynamic scheduler từ kết quả SQL query và thêm vào scheduler_events gốc
+dynamic_schedulers = create_dynamic_scheduler_events()
+
+# Kết hợp các dynamic scheduler cron vào scheduler_events hiện có
+scheduler_events.update(dynamic_schedulers)
