@@ -11,7 +11,7 @@
       <div
         v-if="data"
         id="doughnut-chart-status"
-        style="min-width: 310px; min-height: 310px"
+        style="min-width: 260px; min-height: 260px"
       ></div>
       <div v-else><Spinner class="w-8" /></div>
     </div>

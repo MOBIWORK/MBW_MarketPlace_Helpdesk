@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex justify-between py-[15px]">
+    <div class="flex justify-between pb-[15px] xl:pt-[15px]">
       <div class="flex max-w-[50%] items-center gap-2">
         <CustomerAgentContact :contact="ticketContact" />
       </div>

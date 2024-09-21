@@ -11,7 +11,7 @@
       <div
         v-if="data"
         id="doughnut-chart"
-        style="min-width: 310px; min-height: 310px"
+        style="min-width: 260px; min-height: 260px"
       ></div>
       <div v-else><Spinner class="w-8" /></div>
     </div>
@@ -68,9 +68,8 @@ const initOrUpdateChart = () => {
       trigger: "item",
     },
     legend: {
-      orient: "vertical",
-      right: "right", // Legend nằm bên phải
-      top: "middle", // Canh giữa theo chiều dọc
+      bottom: "0",
+      left: "center",
       formatter: (name) => {
         const item = chartDataLegend
           ? chartDataLegend.find((d) => d.name === name)
@@ -96,7 +95,7 @@ const initOrUpdateChart = () => {
         name: "Tickets",
         type: "pie",
         radius: ["50%", "70%"],
-        center: ["35%", "50%"],
+        center: ["50%", "50%"],
         avoidLabelOverlap: false,
         label: {
           show: true,
