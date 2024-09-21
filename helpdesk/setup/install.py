@@ -30,6 +30,7 @@ def after_install():
     create_welcome_ticket()
     create_ticket_feedback_options()
     add_property_setter()
+    add_defaut_auto_send_mail()
 
 def add_defaut_auto_send_mail():
     # Tạo dynamic scheduler từ kết quả SQL query và thêm vào scheduler_events gốc
@@ -37,6 +38,7 @@ def add_defaut_auto_send_mail():
 
     # Kết hợp các dynamic scheduler cron vào scheduler_events hiện có
     scheduler_events.update(dynamic_schedulers)
+    
 def add_support_redirect_to_tickets():
     website_settings = frappe.get_doc("Website Settings")
 
@@ -292,9 +294,3 @@ def add_property_setter():
         doc.property_type = "Data"
         doc.value = "email_id"
         doc.insert()
-
-# Tạo dynamic scheduler từ kết quả SQL query và thêm vào scheduler_events gốc
-dynamic_schedulers = create_dynamic_scheduler_events()
-
-# Kết hợp các dynamic scheduler cron vào scheduler_events hiện có
-scheduler_events.update(dynamic_schedulers)
