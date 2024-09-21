@@ -24,7 +24,7 @@
       />
     </div>
   </div>
-  <div class="flex flex-col md:flex-row">
+  <div class="flex flex-col md:grid md:grid-cols-2">
     <!-- Component A -->
     <div class="flex-1">
       <ChartNumberOfTicketsByChannel :user_infor="props.user_infor" />

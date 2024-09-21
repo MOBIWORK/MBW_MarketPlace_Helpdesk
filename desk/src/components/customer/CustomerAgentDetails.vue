@@ -3,7 +3,7 @@
     <div
       v-for="s in sections"
       :key="s.label"
-      class="flex items-center text-base leading-5"
+      class="flex items-center text-base leading-5 justify-between"
     >
       <Tooltip :text="s.label">
         <div class="w-[126px] text-sm text-gray-600">{{ s.label }}</div>

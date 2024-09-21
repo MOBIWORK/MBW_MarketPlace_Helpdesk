@@ -119,12 +119,12 @@ const send = createResource({
 });
 
 function handleClose() {
-  // showFeedbackDialog.value = true;
-  if (showFeedback.value) {
-    showFeedbackDialog.value = true;
-  } else {
-    setValue.submit({ fieldname: "status", value: "Closed" });
-  }
+  showFeedbackDialog.value = true;
+  // if (showFeedback.value) {
+  //   showFeedbackDialog.value = true;
+  // } else {
+  //   setValue.submit({ fieldname: "status", value: "Closed" });
+  // }
 }
 
 const setValue = createResource({
