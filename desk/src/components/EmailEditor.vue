@@ -78,12 +78,37 @@
       </div>
       <div class="flex justify-between gap-2 overflow-hidden px-10 py-2.5">
         <div class="flex items-center overflow-x-auto">
-          <TextEditorFixedMenu
-            class="-ml-1"
-            :buttons="textEditorMenuButtons"
-            v-if="!isMobileView"
-          />
+          <TextEditorFixedMenu class="-ml-1" :buttons="textEditorMenuButtons" />
           <div class="flex gap-1">
+            <Button
+              v-if="is_check_role_agent_user_login"
+              class="h-7 w-7 rounded bg-white transition-colors hover:bg-gray-200 focus-visible:ring focus-visible:ring-gray-400 active:bg-gray-300"
+              @click="showListKnowledgeBaseSelectorModal = true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 19 19"
+                fill="none"
+              >
+                <rect width="19" height="19" fill="white" />
+                <path
+                  d="M1.5835 2.375H6.3335C7.17335 2.375 7.9788 2.70863 8.57267 3.3025C9.16653 3.89636 9.50016 4.70181 9.50016 5.54167V16.625C9.50016 15.9951 9.24994 15.391 8.80454 14.9456C8.35914 14.5002 7.75505 14.25 7.12516 14.25H1.5835V2.375Z"
+                  stroke="black"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M17.4167 2.375H12.6667C11.8268 2.375 11.0214 2.70863 10.4275 3.3025C9.83363 3.89636 9.5 4.70181 9.5 5.54167V16.625C9.5 15.9951 9.75022 15.391 10.1956 14.9456C10.641 14.5002 11.2451 14.25 11.875 14.25H17.4167V2.375Z"
+                  stroke="black"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </Button>
             <FileUploader
               :upload-args="{
                 doctype: doctype,
@@ -144,6 +169,11 @@
       </div>
     </template>
   </TextEditor>
+  <ListKnowledgeBaseSelectorModal
+    v-model="showListKnowledgeBaseSelectorModal"
+    :doctype="doctype"
+    @apply="applyListKnowledgeBase"
+  />
   <CannedResponseSelectorModal
     v-model="showCannedResponseSelectorModal"
     :doctype="doctype"
@@ -165,12 +195,14 @@ import {
   MultiSelectInput,
   AttachmentItem,
   CannedResponseSelectorModal,
+  ListKnowledgeBaseSelectorModal,
 } from "@/components";
 import { AttachmentIcon, EmailIcon } from "@/components/icons";
 import { useScreenSize } from "@/composables/screen";
 
 const editorRef = ref(null);
 const showCannedResponseSelectorModal = ref(false);
+const showListKnowledgeBaseSelectorModal = ref(false);
 const loading = ref(false);
 const { isMobileView } = useScreenSize();
 
@@ -220,10 +252,17 @@ const cc = computed(() => (ccEmailsClone.value?.length ? true : false));
 const bcc = computed(() => (bccEmailsClone.value?.length ? true : false));
 const ccInput = ref(null);
 const bccInput = ref(null);
-
+const dialog2 = ref(false);
+const is_check_role_agent_user_login = ref(false);
 function applyCannedResponse(template) {
   newEmail.value = template.message;
   showCannedResponseSelectorModal.value = false;
+}
+function applyListKnowledgeBase(template) {
+  const hostOrigin = window.location.origin;
+  const articleLink = `${hostOrigin}/helpdesk/kb/articles/${template.category_level_three}?category=${template.category_level_one}&subCategory=${template.category_level_two}`;
+  newEmail.value = `<a href="${articleLink}" target="_blank" class="link_knowledge_base text-blue-500 underline cursor-pointer pointer-events-auto">${articleLink}</a>`;
+  showListKnowledgeBaseSelectorModal.value = false;
 }
 
 function submitMail() {
@@ -330,6 +369,13 @@ const textEditorMenuButtons = [
   ],
 ];
 
+const data = createResource({
+  url: "helpdesk.override.api.get_check_role_agent_user_login",
+  auto: true,
+  onSuccess: (data) => {
+    is_check_role_agent_user_login.value = data;
+  },
+});
 defineExpose({
   addToReply,
 });

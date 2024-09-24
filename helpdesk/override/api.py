@@ -229,4 +229,24 @@ def get_data_detail_list_ticket(name):
     data = result if result else []
     return data
 
+@frappe.whitelist()
+def get_data_list_knowledge_base():
+    result = frappe.db.sql("""
+        SELECT 
+            hdac.parent_category AS category_level_one,
+            hda.category AS category_level_two,
+            hda.name AS category_level_three,
+            CONCAT(hdac.category_name, ' / ', hda.title) AS category_beadcrum
+        FROM `tabHD Article` as hda
+        LEFT JOIN `tabHD Article Category` as hdac on hda.category = hdac.name
+        WHERE 1 = 1 AND hda.status = 'Published'  AND hdac.status = 'Published'
+    """,as_dict=True)
+    return result
 
+
+@frappe.whitelist()
+# Hàm kiểm tra tài khoản đăng nhập xem có quyền là agent không
+def get_check_role_agent_user_login():
+    user = frappe.get_doc("User", frappe.session.user)
+    is_agent = any(role.role == "Agent" for role in user.roles)
+    return {"is_agent": is_agent}
