@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grow cursor-pointer rounded-md border-transparent bg-gray-50 text-base leading-6 transition-all duration-300 ease-in-out"
+    class="grow cursor-pointer rounded-md border-transparent bg-gray-50 text-base leading-6 transition-all duration-300 ease-in-out p-3"
   >
     <div class="mb-1 flex items-center justify-between gap-2">
       <!-- comment design for mobile -->
@@ -54,6 +54,12 @@
         >
           <ReplyAllIcon class="h-4 w-4" />
         </Button>
+        <Button
+          class="text-gray-700"
+          @click="showCreateKnowledgeBaseModal = true"
+        >
+          <CreateNewArticle class="h-4 w-4" />
+        </Button>
       </div>
     </div>
     <div class="text-sm leading-5 text-gray-600">
@@ -84,12 +90,22 @@
       />
     </div>
   </div>
+  <CreateKnowledgeBaseModal
+    v-model="showCreateKnowledgeBaseModal"
+    :content="content"
+    @apply="applyListKnowledgeBase"
+  />
 </template>
 
 <script setup lang="ts">
-import { UserAvatar, AttachmentItem } from "@/components";
+import {
+  UserAvatar,
+  AttachmentItem,
+  CreateKnowledgeBaseModal,
+} from "@/components";
+import { ref } from "vue";
 import { dateFormat, timeAgo, dateTooltipFormat } from "@/utils";
-import { ReplyIcon, ReplyAllIcon } from "./icons/";
+import { ReplyIcon, ReplyAllIcon, CreateNewArticle } from "./icons/";
 import { useScreenSize } from "@/composables/screen";
 
 const props = defineProps({
@@ -114,8 +130,11 @@ const props = defineProps({
     required: true,
   },
 });
-
+const showCreateKnowledgeBaseModal = ref(false);
 const emit = defineEmits(["reply"]);
-
 const { isMobileView } = useScreenSize();
+
+function applyListKnowledgeBase() {
+  showCreateKnowledgeBaseModal.value = false;
+}
 </script>

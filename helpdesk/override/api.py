@@ -4,18 +4,19 @@ from frappe import _
 @frappe.whitelist()
 def get_information_contact(name):
     infor_user = frappe.get_value("Customer", name, ["image", "customer_name","email_id","mobile_no", "customer_details","website","customer_primary_address"])
-    
+    address_user = " "
     if infor_user :
-        address_user = frappe.get_value("Address", infor_user[6], ["address_line1"])
+        if infor_user[6] : 
+            address_user = frappe.get_value("Address", infor_user[6], ["address_line1"])
     return {
         "image": infor_user[0] if infor_user[0] else infor_user[1][0],
-        "name": infor_user[1],
-        "email" : infor_user[2],
-        "phone" : infor_user[3],
-        "website":infor_user[5],
-        "address": address_user[0],
-        "description": infor_user[4],
-        "primary_contact" : infor_user[2],
+        "name": infor_user[1] or " ",
+        "email" : infor_user[2] or " ",
+        "phone" : infor_user[3] or " ",
+        "website":infor_user[5] or " ",
+        "address": address_user[0] or " ",
+        "description": infor_user[4] or " ",
+        "primary_contact" : infor_user[2] or " ",
     }
 
 @frappe.whitelist()
@@ -250,3 +251,57 @@ def get_check_role_agent_user_login():
     user = frappe.get_doc("User", frappe.session.user)
     is_agent = any(role.role == "Agent" for role in user.roles)
     return {"is_agent": is_agent}
+
+
+@frappe.whitelist()
+def get_data_list_category_knowledge_base():
+    
+    result = frappe.db.sql("""
+        SELECT 
+            category_name AS label,
+            name AS value
+        FROM `tabHD Article Category` 
+        WHERE parent_category IS NULL
+    """,as_dict=True)
+    if result :
+        return result
+    else : 
+        return []
+
+@frappe.whitelist()
+def get_data_list_sub_category_knowledge_base(context_category):
+    result = frappe.db.sql("""
+        SELECT 
+            category_name as label,
+            name AS value
+        FROM `tabHD Article Category`
+        WHERE  parent_category = %s
+    """,context_category, as_dict=True)
+
+    if result :
+        return result
+    else : 
+        return []
+
+
+@frappe.whitelist()
+def action_create_new_article(title, category, subcategory, content, published):
+    try:
+        if frappe.db.exists('HD Article', {'title': title}):
+            return {"error": _("An article with this title already exists.")}
+        
+        user = frappe.get_doc("User", frappe.session.user)
+        if user:
+            frappe.get_doc(
+                {
+                    "doctype": "HD Article",
+                    "title": title,
+                    "content": content,
+                    "category": subcategory.get('value'),
+                    "status": 'Draft' if published == "button_create" else 'Published',
+                }
+            ).insert()
+            return {"status": 200}
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), _("Error creating article"))
+        return {"error": str(e)}
