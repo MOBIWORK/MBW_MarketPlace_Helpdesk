@@ -53,6 +53,10 @@ doc_events = {
     "Assignment Rule": {
         "on_trash": "helpdesk.overrides.on_assignment_rule_trash",
     },
+    "HD Ticket": {
+        "on_update": "helpdesk.helpdesk.doctype.hd_ticket.hd_ticket.update_data_tickets_for_doctype_hd_agent",
+        "on_trash": "helpdesk.helpdesk.doctype.hd_ticket.hd_ticket.update_data_tickets_for_doctype_hd_agent",
+    },
 }
 
 has_permission = {

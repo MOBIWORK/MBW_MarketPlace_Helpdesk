@@ -44,7 +44,11 @@
             @click="(event) => filterFunc(event, c)"
           >
             <slot :name="c.key" :data="data">
-              {{ data[c.key] || "⸺" }}
+              {{
+                typeof (data[c.key] == "number")
+                  ? data[c.key] || "0"
+                  : data[c.key] || "__"
+              }}
             </slot>
           </div>
         </div>

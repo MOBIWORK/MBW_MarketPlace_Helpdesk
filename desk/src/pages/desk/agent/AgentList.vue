@@ -66,17 +66,32 @@ const columns = [
   {
     label: "Name",
     key: "name",
-    width: "w-80",
+    width: "w-60",
   },
   {
     label: "Email",
     key: "email",
-    width: "w-80",
+    width: "w-60",
   },
   {
     label: "Username",
     key: "username",
-    width: "w-80",
+    width: "w-60",
+  },
+  {
+    label: "Total number of tickets",
+    key: "total_number_of_tickets",
+    width: "w-60",
+  },
+  {
+    label: "Pending tickets",
+    key: "pending_tickets",
+    width: "w-60",
+  },
+  {
+    label: "Average Ratings",
+    key: "average_ratings",
+    width: "w-60",
   },
 ];
 
@@ -89,6 +104,9 @@ const agents = createListManager({
     "user.user_image",
     "user.email",
     "user.username",
+    "total_number_of_tickets",
+    "pending_tickets",
+    "average_ratings",
   ],
   filters: {
     is_active: "1",
