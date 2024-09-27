@@ -10,7 +10,10 @@
   "agent_name",
   "user_image",
   "is_active",
-  "groups"
+  "groups",
+  "total_number_of_tickets",
+  "pending_tickets",
+  "average_ratings"
  ],
  "fields": [
   {
@@ -47,11 +50,32 @@
    "fieldtype": "Data",
    "label": "Image",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_number_of_tickets",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total number of tickets"
+  },
+  {
+   "default": "0",
+   "fieldname": "pending_tickets",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Pending tickets"
+  },
+  {
+   "default": "0.0",
+   "fieldname": "average_ratings",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Average Ratings"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-07-24 22:31:23.178626",
+ "modified": "2024-09-27 09:17:57.145524",
  "modified_by": "Administrator",
  "module": "Helpdesk",
  "name": "HD Agent",

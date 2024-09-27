@@ -850,3 +850,125 @@ def permission_query(user):
             customer=frappe.db.escape(c)
         )
     return res
+
+def update_data_tickets_for_doctype_hd_agent(doc, user=None):
+    total_tickets = frappe.db.sql("""
+            WITH extracted_emails AS (
+                SELECT 
+                    JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[0]')) AS email
+                FROM `tabHD Ticket`
+                WHERE _assign IS NOT NULL
+                
+                UNION ALL
+                
+                SELECT 
+                    JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[1]')) AS email 
+                FROM `tabHD Ticket`
+                WHERE _assign IS NOT NULL AND JSON_LENGTH(_assign) > 1
+            )
+
+            SELECT 
+                email AS agent_email, 
+                COUNT(*) AS total_number_of_tickets 
+            FROM extracted_emails
+            GROUP BY email;
+        """,as_dict=True)
+    pending_tickets = frappe.db.sql("""
+            SELECT 
+                email AS agent_email, 
+                COUNT(*) AS pending_tickets 
+            FROM (
+                SELECT 
+                    JSON_UNQUOTE(email) AS email
+                FROM `tabHD Ticket`, 
+                JSON_TABLE(_assign, '$[*]' COLUMNS (email VARCHAR(255) PATH '$')) AS jt
+                WHERE agreement_status IN ("First Response Due", "Resolution due") 
+                AND status = "Open" 
+                AND _assign IS NOT NULL
+            ) AS extracted_emails
+            WHERE email IS NOT NULL
+            GROUP BY email;
+        """,as_dict=True)
+    average_ratings = frappe.db.sql("""
+            WITH extracted_emails AS (
+                SELECT 
+                    JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[0]')) AS email,
+                    COUNT(JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[0]'))) AS sum_ticket_emails,
+                    SUM(
+                        CASE 
+                            WHEN feedback_rating = 0.2 THEN '1'
+                            WHEN feedback_rating = 0.4 THEN '2'
+                            WHEN feedback_rating = 0.6 THEN '3'
+                            WHEN feedback_rating = 0.8 THEN '4'
+                            WHEN feedback_rating = 1.0 THEN '5'
+                            ELSE 0 
+                        END) AS rating_value
+                FROM `tabHD Ticket`
+                WHERE feedback_rating > 0 AND _assign IS NOT NULL 
+                GROUP BY JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[0]'))
+                
+                UNION ALL
+                
+                SELECT 
+                    JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[1]')) AS email,
+                    COUNT(JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[1]'))) AS sum_ticket_emails,
+                    SUM(
+                        CASE 
+                            WHEN feedback_rating = 0.2 THEN '1'
+                            WHEN feedback_rating = 0.4 THEN '2'
+                            WHEN feedback_rating = 0.6 THEN '3'
+                            WHEN feedback_rating = 0.8 THEN '4'
+                            WHEN feedback_rating = 1.0 THEN '5'
+                            ELSE 0 
+                        END) AS rating_value
+                FROM `tabHD Ticket`
+                WHERE feedback_rating > 0 AND JSON_LENGTH(_assign) > 1 AND _assign IS NOT NULL
+                GROUP BY JSON_UNQUOTE(JSON_EXTRACT(_assign, '$[1]'))
+            )
+
+            SELECT 
+                email AS agent_email, 
+                CASE 
+                    WHEN sum_ticket_emails > 0 THEN ROUND((rating_value / sum_ticket_emails),1)
+                    ELSE 0 
+                END AS average_rating
+            FROM extracted_emails
+            GROUP BY email;
+        """,as_dict=True)
+    
+    dict = {}
+    result = []
+    
+    for item in total_tickets :
+        key = item['agent_email']
+        dict[key] = {
+            "agent_email": item["agent_email"],
+            "total_number_of_tickets": item["total_number_of_tickets"],
+            "pending_tickets": 0,  
+            "average_rating": 0        
+        }
+    
+    for item in pending_tickets :
+        key = item['agent_email']
+        if key in dict :
+            dict[key]["pending_tickets"] = item["pending_tickets"]
+    
+    for item in average_ratings :
+        key = item['agent_email']
+        if key in dict :
+            dict[key]["average_rating"] = item["average_rating"]
+    
+
+    result = list(dict.values()) 
+    
+    get_list_agent = frappe.db.get_list('HD Agent', pluck='name')
+    if len(get_list_agent) > 0 :
+        for list_item in get_list_agent:
+            for item in result :
+                if list_item == item.get('agent_email'):
+                    frappe.db.set_value('HD Agent', item.get('agent_email'), {
+                        'total_number_of_tickets': item.get('total_number_of_tickets') or 0,
+                        'pending_tickets': item.get('pending_tickets') or 0,
+                        'average_ratings': item.get('average_rating') or 0
+                    })
+        
