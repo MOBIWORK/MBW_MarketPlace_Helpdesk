@@ -5,6 +5,7 @@ from frappe.utils.caching import redis_cache
 from pypika import Criterion
 
 from helpdesk.utils import check_permissions
+from datetime import datetime
 
 
 @frappe.whitelist()
@@ -142,6 +143,10 @@ def get_list_data(
         )
         or []
     )
+    # Convert type datetime of column create
+    for record in data:
+        if 'creation' in record and isinstance(record['creation'], datetime):
+            record['creation'] = record['creation'].strftime("%d %B %Y, %I:%M %p")
 
     fields = frappe.get_meta(doctype).fields
     fields = [field for field in fields if field.fieldtype not in no_value_fields]

@@ -91,7 +91,9 @@
             </Tooltip>
           </div>
           <div v-else-if="column.key === 'creation'">
-            {{ dayjs.tz(item).fromNow() }}
+            <span>{{ dayjs(item).format("DD MMMM YYYY") }}</span
+            ><br />
+            <span>{{ dayjs(item).format("hh:mm A") }}</span>
           </div>
           <div v-else-if="column.key === 'modified'">
             {{ dayjs.tz(item).fromNow() }}

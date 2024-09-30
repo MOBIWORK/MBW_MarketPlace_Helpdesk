@@ -18,14 +18,14 @@
       <Sort
         :sortable-fields="sort.sortableFields"
         :sorts="sort.sorts"
-        @event:sort="(e) => emitToParent(e, 'event:sort')"
         :hide-label="isMobileView"
+        @event:sort="(e) => emitToParent(e, 'event:sort')"
       />
       <ColumnSettings
         :fields="column.fields"
         :columns="column.columns"
-        @event:column="(e) => emitToParent(e, 'event:column')"
         :hide-label="isMobileView"
+        @event:column="(e) => emitToParent(e, 'event:column')"
       />
     </div>
   </div>
@@ -138,7 +138,33 @@ const presetFilters = [
     },
   },
   {
-    label: "My Open Tickets",
+    label: "Assigned Tickets",
+    onClick: (e) => {
+      const filterAssigned = getAssignedFilters("assigned");
+      emitToParent(
+        {
+          event: "preset",
+          data: filterAssigned,
+        },
+        "event:filter"
+      );
+    },
+  },
+  {
+    label: "Unassigned Tickets",
+    onClick: (e) => {
+      const filterUnassigned = getAssignedFilters("unassigned");
+      emitToParent(
+        {
+          event: "preset",
+          data: filterUnassigned,
+        },
+        "event:filter"
+      );
+    },
+  },
+  {
+    label: "My Open Ticket",
     onClick: (e) => {
       const preset = getPresetFilters("Open");
       emitToParent(
@@ -193,6 +219,40 @@ const presetFilters = [
 
 function setTitle(title: string) {
   document.title = title;
+}
+
+function getAssignedFilters(type) {
+  if (type === "assigned") {
+    return {
+      filters: [
+        {
+          field: props.filter.filterableFields.find(
+            (f) => f.fieldname === "_assign"
+          ),
+          operator: "!=",
+          value: "",
+        },
+      ],
+      filtersToApply: {
+        _assign: ["!=", ""],
+      },
+    };
+  } else if (type === "unassigned") {
+    return {
+      filters: [
+        {
+          field: props.filter.filterableFields.find(
+            (f) => f.fieldname === "_assign"
+          ),
+          operator: "=",
+          value: "",
+        },
+      ],
+      filtersToApply: {
+        _assign: ["=", ""],
+      },
+    };
+  }
 }
 
 function getPresetFilters(status: string) {
