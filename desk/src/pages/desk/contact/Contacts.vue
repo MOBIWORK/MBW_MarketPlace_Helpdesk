@@ -2,11 +2,11 @@
   <div class="flex flex-col">
     <LayoutHeader>
       <template #left-header>
-        <div class="text-lg font-medium text-gray-900">Contacts</div>
+        <div class="text-lg font-medium text-gray-900">{{__('Contacts')}}</div>
       </template>
       <template #right-header>
         <Button
-          label="New contact"
+          :label="__('New contact')"
           theme="gray"
           variant="solid"
           @click="isDialogVisible = !isDialogVisible"
@@ -69,7 +69,7 @@ const options = computed(() => {
       },
     },
     emptyState: {
-      title: "No Contacts Found",
+      title: __("No Contacts Found"),
     },
   };
 });
@@ -86,7 +86,7 @@ function openContact(id: string): void {
 
 function handleContactUpdated(): void {
   createToast({
-    title: "Contact updated",
+    title: __("Contact updated"),
     icon: "check",
     iconClasses: "text-green-500",
   });
@@ -95,7 +95,7 @@ function handleContactUpdated(): void {
 }
 usePageMeta(() => {
   return {
-    title: "Contacts",
+    title: __('Contacts'),
   };
 });
 </script>

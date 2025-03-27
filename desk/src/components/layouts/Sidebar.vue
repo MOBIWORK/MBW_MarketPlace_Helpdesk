@@ -98,7 +98,7 @@
       :icon="isExpanded ? LucideArrowLeftFromLine : LucideArrowRightFromLine"
       :is-active="false"
       :is-expanded="isExpanded"
-      :label="isExpanded ? 'Collapse' : 'Expand'"
+      :label="isExpanded ? __('Collapse') : __('Expand')"
       :on-click="() => (isExpanded = !isExpanded)"
     />
     <SettingsModal v-model="showSettingsModal" />
@@ -159,7 +159,7 @@ const allViews = computed(() => {
 
   const options = [
     {
-      label: "All Views",
+      label: __("All Views"),
       hideLabel: true,
       opened: true,
       views: items,
@@ -167,7 +167,7 @@ const allViews = computed(() => {
   ];
   if (publicViews.value?.length && !isCustomerPortal.value) {
     options.push({
-      label: "Public Views",
+      label: __("Public Views"),
       opened: true,
       hideLabel: false,
       views: parseViews(publicViews.value),
@@ -175,7 +175,7 @@ const allViews = computed(() => {
   }
   if (pinnedViews.value?.length) {
     options.push({
-      label: "Private Views",
+      label: __("Private Views"),
       opened: true,
       hideLabel: false,
       views: parseViews(pinnedViews.value),
@@ -187,7 +187,7 @@ const allViews = computed(() => {
 function parseViews(views) {
   return views.map((view) => {
     return {
-      label: view.label,
+      label: __(view.label),
       icon: view.icon,
       to: {
         name: view.route_name,
@@ -195,7 +195,7 @@ function parseViews(views) {
       },
       onClick: () => {
         currentView.value = {
-          label: view.label,
+          label: __(view.label),
           icon: view.icon,
         };
       },
@@ -205,7 +205,7 @@ function parseViews(views) {
 
 const customerPortalDropdown = computed(() => [
   {
-    label: "Log out",
+    label: __("Log out"),
     icon: "log-out",
     onClick: () => authStore.logout(),
   },
@@ -216,7 +216,7 @@ const agentPortalDropdown = computed(() => [
     component: markRaw(Apps),
   },
   {
-    label: "Customer portal",
+    label: __("Customer portal"),
     icon: "users",
     onClick: () => {
       const path = router.resolve({ name: CUSTOMER_PORTAL_LANDING });
@@ -225,28 +225,28 @@ const agentPortalDropdown = computed(() => [
   },
   {
     icon: "life-buoy",
-    label: "Support",
+    label: __("Support"),
     onClick: () => window.open("https://t.me/frappedesk"),
   },
   {
     icon: "book-open",
-    label: "Docs",
+    label: __("Docs"),
     onClick: () => window.open("https://docs.frappe.io/helpdesk"),
   },
   {
-    label: "Login to Frappe Cloud",
+    label: __("Login to Frappe Cloud"),
     icon: FrappeCloudIcon,
     onClick: () => confirmLoginToFrappeCloud(),
     condition: () => !isMobileView.value && window.is_fc_site,
   },
   {
-    label: "Settings",
+    label: __("Settings"),
     icon: "settings",
     onClick: () => (showSettingsModal.value = true),
     condition: () => authStore.isAdmin || authStore.isManager,
   },
   {
-    label: "Log out",
+    label: __("Log out"),
     icon: "log-out",
     onClick: () => authStore.logout(),
   },

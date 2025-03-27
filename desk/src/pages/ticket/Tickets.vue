@@ -3,7 +3,7 @@
     <LayoutHeader>
       <template #left-header>
         <ViewBreadcrumbs
-          label="Tickets"
+          :label="__('Tickets')"
           :route-name="isCustomerPortal ? 'TicketsCustomer' : 'TicketsAgent'"
           :options="dropdownOptions"
           :dropdown-actions="viewActions"
@@ -14,7 +14,7 @@
         <RouterLink
           :to="{ name: isCustomerPortal ? 'TicketNew' : 'TicketAgentNew' }"
         >
-          <Button label="Create" theme="gray" variant="solid">
+          <Button :label="__('Create')" theme="gray" variant="solid">
             <template #prefix>
               <LucidePlus class="h-4 w-4" />
             </template>
@@ -179,7 +179,7 @@ const options = {
   showSelectBanner: true,
   selectBannerActions,
   emptyState: {
-    title: "No Tickets Found",
+    title: __("No Tickets Found"),
     icon: h(TicketIcon, {
       class: "h-10 w-10",
     }),
@@ -300,10 +300,10 @@ let viewDialog = reactive({
 const dropdownOptions = computed(() => {
   const items = [
     {
-      group: "Default Views",
+      group: __('Default Views'),
       items: [
         {
-          label: "List View",
+          label: __("List View"),
           icon: "align-justify",
           onClick: () =>
             router.push({
@@ -317,29 +317,29 @@ const dropdownOptions = computed(() => {
   // Saved Views
   if (getCurrentUserViews.value?.length !== 0) {
     items.push({
-      group: "Saved Views",
+      group: __("Saved Views"),
       items: parseViews(getCurrentUserViews.value),
     });
   }
   if (pinnedViews.value?.length !== 0) {
     items.push({
-      group: "Private Views",
+      group: __("Private Views"),
       items: parseViews(pinnedViews.value),
     });
   }
   if (publicViews.value?.length !== 0) {
     items.push({
-      group: "Public Views",
+      group: __("Public Views"),
       items: parseViews(publicViews.value),
     });
   }
 
   items.push({
-    group: "Create View",
+    group: __("Create View"),
     hideLabel: true,
     items: [
       {
-        label: "Create View",
+        label: __("Create View"),
         icon: "plus",
         onClick: () => {
           resetState();
@@ -359,11 +359,11 @@ const viewActions = (view) => {
 
   let actions = [
     {
-      group: "Default Views",
+      group: __("Default Views"),
       hideLabel: true,
       items: [
         {
-          label: "Duplicate",
+          label: __("Duplicate"),
           icon: h(FeatherIcon, { name: "copy" }),
           onClick: () => {
             viewDialog.view.label = _view.label + " (New)";
@@ -379,7 +379,7 @@ const viewActions = (view) => {
   ];
   if (!_view.public || isManager) {
     actions[0].items.push({
-      label: "Edit",
+      label: __("Edit"),
       icon: h(EditIcon, { class: "h-4 w-4" }),
       onClick: () => {
         viewDialog.view.label = _view.label;
@@ -391,7 +391,7 @@ const viewActions = (view) => {
     });
     if (!_view.public) {
       actions[0].items.push({
-        label: _view?.pinned ? "Unpin View" : "Pin View",
+        label: _view?.pinned ? __("Unpin View") : __("Pin View"),
         icon: h(_view?.pinned ? UnpinIcon : PinIcon, { class: "h-4 w-4" }),
         onClick: () => {
           const newView = {
@@ -404,7 +404,7 @@ const viewActions = (view) => {
     }
     if (isManager && !isCustomerPortal.value) {
       actions[0].items.push({
-        label: _view?.public ? "Make Private" : "Make Public",
+        label: _view?.public ? __("Make Private") : __("Make Public"),
         icon: h(FeatherIcon, {
           name: _view?.public ? "lock" : "unlock",
           class: "h-4 w-4",
@@ -417,9 +417,9 @@ const viewActions = (view) => {
 
           if (_view.public) {
             confirmDialog({
-              title: `Make ${_view.label} private?`,
+              title: `${__("Make")} ${_view.label} ${__("private")}?`,
               message:
-                "This view is currently public. Changing it to private will hide it for all the users.",
+                __("This view is currently public. Changing it to private will hide it for all the users."),
               onConfirm: ({ hideDialog }: { hideDialog: Function }) => {
                 hideDialog();
                 updateView(newView);
@@ -432,19 +432,19 @@ const viewActions = (view) => {
       });
     }
     actions.push({
-      group: "Delete View",
+      group: __("Delete View"),
       hideLabel: true,
       items: [
         {
-          label: "Delete",
+          label: __("Delete"),
           icon: "trash-2",
           onClick: () => {
             confirmDialog({
-              title: `Delete ${_view.label}?`,
-              message: `Are you sure you want to delete this view?
+              title: `${__("Delete")} ${_view.label}?`,
+              message: `${__("Are you sure you want to delete this view")}?
               ${
                 _view.public
-                  ? "This view is public, and will be removed for all users."
+                  ? __("This view is public, and will be removed for all users.")
                   : ""
               }`,
               onConfirm: ({ hideDialog }: { hideDialog: Function }) => {
@@ -514,7 +514,7 @@ function handleView(viewInfo, action) {
     view = {
       dt: "HD Ticket",
       type: "list",
-      label: viewInfo.label ?? "List",
+      label: viewInfo.label ?? __("List"),
       icon: viewInfo.icon ?? "",
       route_name: router.currentRoute.value.name as string,
       order_by: listViewRef.value?.list?.params.order_by,
@@ -528,7 +528,7 @@ function handleView(viewInfo, action) {
   // createView
   createView(view, (d) => {
     currentView.value = {
-      label: d.label || "List",
+      label: d.label || __("List"),
       icon: getIcon(d.icon),
     };
     router.push({
@@ -544,7 +544,7 @@ function handleView(viewInfo, action) {
 
 function handleSuccess(msg = "created") {
   createToast({
-    title: `View ${msg} successfully`,
+    title: `View ${msg} ${__("successfully")}`,
     icon: "check",
     iconClasses: "text-green-600",
   });
@@ -562,14 +562,14 @@ function resetState() {
 onMounted(() => {
   if (!route.query.view) {
     currentView.value = {
-      label: "List",
+      label: __("List"),
       icon: "lucide:align-justify",
     };
   }
 });
 usePageMeta(() => {
   return {
-    title: "Tickets",
+    title: __("Tickets"),
   };
 });
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <Dialog v-model="show" :options="{ title: 'Export' }">
+  <Dialog v-model="show" :options="{ title: __('Export') }">
     <template #body-content>
       <FormControl
         v-model="form.export_type"
         variant="outline"
-        :label="'Export Type'"
+        :label="__('Export Type')"
         type="select"
         :options="[
           {
@@ -23,13 +23,13 @@
         <FormControl
           v-model="form.export_all"
           type="checkbox"
-          :label="`Export All ${rowCount} Record(s)`"
+          :label="`${__('Export All')} ${rowCount} ${__('Record(s)')}`"
         />
       </div>
     </template>
     <template #actions>
       <Button
-        label="Download"
+        :label="__('Download')"
         variant="solid"
         @click="() => emit('update', form)"
         class="w-full"

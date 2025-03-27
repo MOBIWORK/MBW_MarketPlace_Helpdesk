@@ -2,7 +2,7 @@
   <div class="flex w-[382px] flex-col border-l gap-4">
     <!-- Ticket ID -->
     <div class="flex items-center justify-between border-b px-5 py-3">
-      <span class="cursor-copy text-lg font-semibold">Ticket details</span>
+      <span class="cursor-copy text-lg font-semibold">{{__('Ticket details')}}</span>
     </div>
     <!-- user info and sla info -->
     <div class="flex flex-col gap-4 pt-0 px-5 py-3 border-b">
@@ -34,7 +34,7 @@
         class="flex items-center text-base leading-5"
         v-for="field in ticketBasicInfo"
       >
-        <span class="w-[126px] text-sm text-gray-600">{{ field.label }}</span>
+        <span class="w-[126px] text-sm text-gray-600">{{ __(field.label) }}</span>
         <span class="text-base text-gray-800 flex-1">
           {{ field.value }}
         </span>
@@ -66,7 +66,7 @@
         class="flex items-center text-base leading-5"
         v-for="field in ticketAdditionalInfo"
       >
-        <span class="w-[126px] text-sm text-gray-600">{{ field.label }}</span>
+        <span class="w-[126px] text-sm text-gray-600">{{ __(field.label) }}</span>
         <span class="text-base text-gray-800 flex-1">
           {{ field.value }}
         </span>
@@ -113,7 +113,7 @@ function firstResponseData() {
     dayjs().isBefore(dayjs(ticket.data.response_by))
   ) {
     firstResponse = {
-      label: `Due in ${formatTime(
+      label: `${__('Due in')} ${formatTime(
         dayjs(ticket.data.response_by).diff(dayjs(), "s")
       )}`,
       color: "orange",
@@ -124,7 +124,7 @@ function firstResponseData() {
     )
   ) {
     firstResponse = {
-      label: `Fulfilled in ${formatTime(
+      label: `${__('Fulfilled in')} ${formatTime(
         dayjs(ticket.data.first_responded_on).diff(
           dayjs(ticket.data.creation),
           "s"
@@ -148,7 +148,7 @@ function resolutionData() {
     dayjs().isBefore(ticket.data.resolution_by)
   ) {
     resolution = {
-      label: `Due in ${formatTime(
+      label: `${__('Due in')} ${formatTime(
         dayjs(ticket.data.resolution_by).diff(dayjs(), "s")
       )}`,
       color: "orange",
@@ -157,7 +157,7 @@ function resolutionData() {
     dayjs(ticket.data.resolution_date).isBefore(ticket.data.resolution_by)
   ) {
     resolution = {
-      label: `Fulfilled in ${formatTime(
+      label: `${__('Fulfilled in')} ${formatTime(
         dayjs(ticket.data.resolution_date).diff(
           dayjs(ticket.data.creation),
           "s"
@@ -217,7 +217,7 @@ const ticketAdditionalInfo = computed(() => {
 function transformStatus(status: string) {
   switch (status) {
     case "Replied":
-      return "Awaiting reply";
+      return __("Awaiting reply");
     default:
       return status;
   }

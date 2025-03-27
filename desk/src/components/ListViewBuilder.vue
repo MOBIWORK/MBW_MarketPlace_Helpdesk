@@ -7,7 +7,7 @@
     <QuickFilters v-if="!isMobileView" class="flex-1" />
     <div class="flex items-start gap-2 justify-end h-full" v-if="!isMobileView">
       <Button
-        label="Save Changes"
+        :label="__('Save Changes')"
         v-if="isViewUpdated && canSaveView"
         @click="handleViewUpdate"
       />
@@ -216,7 +216,7 @@ const { isMobileView } = useScreenSize();
 
 const defaultEmptyState = {
   icon: "",
-  title: "No Data Found",
+  title: __("No Data Found"),
 };
 
 const defaultParams = reactive({
@@ -246,6 +246,7 @@ const list = createResource({
     data.columns.forEach((column) => {
       handleFetchFromField(column);
       handleColumnConfig(column);
+      column.label = __(column.label);
     });
     if (options.value.doctype === "HD Ticket") {
       data.data.forEach((row) => {
@@ -287,8 +288,8 @@ const rows = computed(() => {
   }
   return list.data?.data;
 });
-const columns = ref([]);
 
+const columns = ref([]);
 function getGroupedByRows(listRows, groupByField) {
   let groupedRows = [];
   groupByField.options?.forEach((option) => {
@@ -329,6 +330,7 @@ function handleColumnConfig(column) {
   if (!columnConfig.hasOwnProperty(column.key)) return column;
   column.prefix = columnConfig[column.key]?.prefix;
 
+  column.label = __(column.label);
   return column;
 }
 
@@ -344,9 +346,9 @@ const filterableFields = createResource({
   transform: (data) => {
     data = data.map((field) => {
       return {
-        label: field.label,
         value: field.fieldname,
         ...field,
+        label: __(field.label),
       };
     });
     return data;
@@ -359,6 +361,13 @@ const sortableFields = createResource({
   params: {
     doctype: options.value.doctype,
     show_customer_portal_fields: defaultParams.show_customer_portal_fields,
+  },
+  transform: (data) => {
+    let newData = data.map((el) => ({
+      ...el,
+      label: __(el.label)
+    }))
+    return newData;
   },
 });
 
@@ -587,7 +596,7 @@ watch(
     defaultParams.view.name = val;
     handleViewChanges();
     if (!val) {
-      headerView.value.label = "List";
+      headerView.value.label = __("List");
       headerView.value.icon = "lucide:align-justify";
     }
   }
@@ -621,7 +630,7 @@ onMounted(async () => {
     if (route.query.view) {
       const currentView = findCurrentView();
       if (!currentView) return;
-      headerView.value.label = currentView.label || "List";
+      headerView.value.label = currentView.label || __("List");
       headerView.value.icon = getIcon(currentView.icon);
     }
     return;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog :options="{ title: 'Add Agents' }" :show="show" @close="close()">
+    <Dialog :options="{ title: __('Add Agents') }" :show="show" @close="close()">
       <template #body-content>
         <div class="space-y-3">
           <form
@@ -12,7 +12,7 @@
               class="w-full"
               type="text"
               v-model="searchInput"
-              placeholder="Type emails"
+              :placeholder="__('Type emails')"
               @input="(val) => onSearchInputChange(val)"
             />
             <Button
@@ -26,7 +26,7 @@
                 }
               "
             >
-              Add
+              {{__('Add')}}
             </Button>
           </form>
           <div
@@ -61,17 +61,17 @@
           @click="sentInvites()"
           class="mr-2"
           :loading="$resources.sentInvites.loading"
-          >Send Invites</Button
+          >{{__('Send Invites')}}</Button
         >
         <Button appearance="secondary" class="mr-2" @click="close()"
-          >Cancel</Button
+          >{{__('Cancel')}}</Button
         >
         <div class="grow mt-2">
           <Button
             @click="removeAllEmailFromQueue()"
             v-if="inviteQueue.length > 1"
           >
-            Clear All
+            {{__('Clear All')}}
           </Button>
         </div>
       </template>
@@ -178,7 +178,7 @@ export default {
           this.inviteQueue = [];
 
           this.$toast({
-            title: "Invites Sent Successfully!",
+            title: __("Invites Sent Successfully!"),
             icon: "check",
             iconClasses: "text-green-500",
           });
@@ -188,14 +188,14 @@ export default {
         onError: (err) => {
           if (err.exc_type == "PaywallReachedError") {
             this.$toast({
-              title: "Paywall Reached!",
-              text: "You have reached the maximum number of agents you can add. Please upgrade your plan to add more agents.",
+              title: __("Paywall Reached!"),
+              text: __("You have reached the maximum number of agents you can add. Please upgrade your plan to add more agents."),
               icon: "x",
               iconClasses: "text-red-500",
             });
           } else {
             this.$toast({
-              title: "Error Sending Invites!",
+              title: __("Error Sending Invites!"),
               icon: "x",
               iconClasses: "text-red-500",
             });

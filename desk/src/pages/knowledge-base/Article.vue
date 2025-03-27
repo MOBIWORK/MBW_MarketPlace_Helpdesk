@@ -10,7 +10,7 @@
         <!-- Default Buttons -->
         <div class="flex gap-2" v-if="!editable">
           <Button
-            :label="article.data?.status === 'Draft' ? 'Publish' : 'Unpublish'"
+            :label="article.data?.status === 'Draft' ? __('Publish') : __('Unpublish')"
             :iconLeft="article.data?.status !== 'Published' && 'globe'"
             @click="toggleStatus()"
           />
@@ -61,12 +61,12 @@
             <div class="flex gap-2" v-if="editable">
               <DiscardButton
                 :hide-dialog="!isDirty"
-                title="Discard changes?"
-                message="Are you sure you want to discard changes?"
+                :title="__('Discard changes?')"
+                :message="__('Are you sure you want to discard changes?')"
                 @discard="handleDiscard"
               />
 
-              <Button label="Save" @click="handleSave" variant="solid" />
+              <Button :label="__('Save')" @click="handleSave" variant="solid" />
             </div>
           </div>
           <!-- Title -->
@@ -74,7 +74,7 @@
             ref="titleRef"
             class="w-full resize-none border-0 text-3xl font-bold placeholder-ink-gray-3 p-0 pb-3 border-b border-gray-200 focus:ring-0 focus:border-gray-200 overflow-hidden"
             v-model="title"
-            placeholder="Title"
+            :placeholder="__('Title')"
             rows="1"
             wrap="soft"
             maxlength="140"
@@ -92,7 +92,7 @@
           @change="(event:string) => {
 			      content = event;
 		      }"
-          placeholder="Write your article here..."
+          :placeholder="__('Write your article here...')"
         >
           <template #bottom v-if="editable">
             <TextEditorFixedMenu
@@ -253,7 +253,7 @@ function handleMoveToCategory(category: string) {
         article.reload();
         moveToModal.value = false;
         createToast({
-          title: "Articles moved successfully",
+          title: __("Articles moved successfully"),
           icon: "check",
           iconClasses: "text-green-600",
         });
@@ -306,7 +306,7 @@ function handleArticleUpdate() {
           },
         });
         createToast({
-          title: "Article updated successfully",
+          title: __("Article updated successfully"),
           icon: "check",
           iconClasses: "text-green-600",
         });
@@ -319,8 +319,8 @@ function handleArticleUpdate() {
 
 function handleDelete() {
   confirmDialog({
-    title: "Delete Article",
-    message: "Are you sure you want to delete this article?",
+    title: __("Delete Article"),
+    message: __("Are you sure you want to delete this article?"),
     onConfirm: ({ hideDialog }: { hideDialog: Function }) => {
       deleteArticle.submit(
         {
@@ -330,7 +330,7 @@ function handleDelete() {
         {
           onSuccess: () => {
             createToast({
-              title: "Article deleted successfully",
+              title: __("Article deleted successfully"),
               icon: "check",
               iconClasses: "text-green-600",
             });
@@ -391,19 +391,19 @@ const editorClass = computed(() => {
 
 const articleActions = computed(() => [
   {
-    label: "Edit",
+    label: __("Edit"),
     icon: "edit",
     onClick: () => {
       handleEditMode();
     },
   },
   {
-    label: "Move To",
+    label: __("Move To"),
     icon: "corner-up-right",
     onClick: () => (moveToModal.value = true),
   },
   {
-    label: "Share",
+    label: __("Share"),
     icon: "link",
     onClick: () => {
       const url = new URL(window.location.href);
@@ -412,13 +412,13 @@ const articleActions = computed(() => [
     },
   },
   {
-    group: "Danger",
+    group: __("Danger"),
     hideLabel: true,
     items: [
       {
-        label: "Delete",
+        label: __("Delete"),
         component: h(Button, {
-          label: "Delete",
+          label: __("Delete"),
           variant: "ghost",
           iconLeft: "trash-2",
           theme: "red",
@@ -433,7 +433,7 @@ const articleActions = computed(() => [
 const breadcrumbs = computed(() => {
   const items: Breadcrumb[] = [
     {
-      label: "Knowledge Base",
+      label: __("Knowledge Base"),
       route: {
         name: isCustomerPortal.value
           ? "CustomerKnowledgeBase"

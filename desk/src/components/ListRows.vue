@@ -14,9 +14,9 @@
               <span>{{ group.group.label }}</span>
               <span class="text-xs text-ink-gray-5"
                 >{{
-                  group.rows.length +
-                  " Article" +
-                  (group.rows.length > 1 ? "s" : "")
+                  group.rows.length + ' ' +
+                  __("Article") +
+                  (group.rows.length > 1 ? "" : "")
                 }}
               </span>
             </div>
@@ -89,7 +89,7 @@ const actions = (group) => {
     };
   });
   if (group.group.label == "General") {
-    _actions = _actions.filter((action) => action.label === "Add New Article");
+    _actions = _actions.filter((action) => action.label === __("Add New Article"));
   }
   return _actions;
 };

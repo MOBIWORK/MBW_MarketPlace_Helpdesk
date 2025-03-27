@@ -65,8 +65,8 @@
         @click="communicationAreaRef.toggleEmailBox()"
       />
       <Button
-        v-else-if="title == 'Comments'"
-        label="New Comment"
+        v-else-if="title == __('Comments')"
+        :label="__('New Comment')"
         @click="communicationAreaRef.toggleCommentBox()"
       />
     </div>
@@ -104,11 +104,11 @@ const { getUser } = useUserStore();
 const communicationAreaRef: Ref = inject("communicationArea");
 
 const emptyText = computed(() => {
-  let text = "No Activities";
+  let text = __("No Activities");
   if (props.title == "Emails") {
-    text = "No Email Communications";
-  } else if (props.title == "Comments") {
-    text = "No Comments";
+    text = __("No Email Communications");
+  } else if (props.title == __("Comments")) {
+    text = __("No Comments");
     return text;
   }
 });
@@ -117,7 +117,7 @@ const emptyTextIcon = computed(() => {
   let icon = ActivityIcon;
   if (props.title == "Emails") {
     icon = EmailIcon;
-  } else if (props.title == "Comments") {
+  } else if (props.title == __("Comments")) {
     icon = CommentIcon;
   }
   return h(icon, { class: "text-gray-500" });

@@ -6,7 +6,7 @@
       class="flex items-center text-base leading-5"
     >
       <Tooltip :text="s.label">
-        <div class="w-[126px] text-sm text-gray-600">{{ s.label }}</div>
+        <div class="w-[126px] text-sm text-gray-600">{{ __(s.label) }}</div>
       </Tooltip>
       <div class="flex items-center justify-between">
         <div v-if="s.value">{{ s.value }}</div>
@@ -66,12 +66,12 @@ const firstResponseBadge = computed(() => {
   let firstResponse = null;
   if (!props.firstRespondedOn && dayjs().isBefore(dayjs(props.responseBy))) {
     firstResponse = {
-      label: `Due in ${formatTime(dayjs(props.responseBy).diff(dayjs(), "s"))}`,
+      label: `${__('Due in')} ${formatTime(dayjs(props.responseBy).diff(dayjs(), "s"))}`,
       color: "orange",
     };
   } else if (dayjs(props.firstRespondedOn).isBefore(dayjs(props.responseBy))) {
     firstResponse = {
-      label: `Fulfilled in ${formatTime(
+      label: `${__('Fulfilled in')} ${formatTime(
         dayjs(props.firstRespondedOn).diff(dayjs(props.ticketCreatedOn), "s")
       )}`,
       color: "green",
@@ -89,14 +89,14 @@ const resolutionBadge = computed(() => {
   let resolution = null;
   if (!props.resolutionDate && dayjs().isBefore(props.resolutionBy)) {
     resolution = {
-      label: `Due in ${formatTime(
+      label: `${__('Due in')} ${formatTime(
         dayjs(props.resolutionBy).diff(dayjs(), "s")
       )}`,
       color: "orange",
     };
   } else if (dayjs(props.resolutionDate).isBefore(props.resolutionBy)) {
     resolution = {
-      label: `Fulfilled in ${formatTime(
+      label: `${__('Fulfilled in')} ${formatTime(
         dayjs(props.resolutionDate).diff(dayjs(props.ticketCreatedOn), "s")
       )}`,
       color: "green",

@@ -7,7 +7,7 @@
     >
       <Tooltip :text="o.label">
         <div class="w-[106px] shrink-0 truncate text-sm text-gray-600">
-          {{ o.label }}
+          {{ __(o.label) }}
         </div>
       </Tooltip>
       <div
@@ -34,7 +34,7 @@
           v-else
           class="form-control"
           :options="o.store.dropdown"
-          :placeholder="`Add ${o.label}`"
+          :placeholder="`${__('Add')} ${o.label}`"
           :value="ticket[o.field]"
           @change="update(o.field, $event.value)"
         />
@@ -92,7 +92,7 @@ const options = computed(() => {
       label: "Customer",
       type: "link",
       options: "HD Customer",
-      placeholder: "Select Customer",
+      placeholder: __("Select Customer"),
     },
   ];
 });

@@ -2,11 +2,11 @@
   <div class="flex flex-col">
     <LayoutHeader>
       <template #left-header>
-        <div class="text-lg font-medium text-gray-900">Teams</div>
+        <div class="text-lg font-medium text-gray-900">{{__('Teams')}}</div>
       </template>
       <template #right-header>
         <Button
-          label="New team"
+          :label="__('New team')"
           theme="gray"
           variant="solid"
           @click="showNewDialog = !showNewDialog"
@@ -31,21 +31,21 @@
     <Dialog
       v-model="showNewDialog"
       :options="{
-        title: 'New team',
+        title: __('New team'),
       }"
     >
       <template #body-content>
         <form class="space-y-2" @submit.prevent="newTeam.submit">
           <FormControl
             v-model="newTeamTitle"
-            label="Title"
-            placeholder="Product experts"
+            :label="__('Title')"
+            :placeholder="__('Product experts')"
             type="text"
           />
           <Button
             :disabled="isEmpty(newTeamTitle)"
             class="w-full"
-            label="Create"
+            :label="__('Create')"
             theme="gray"
             variant="solid"
           />
@@ -67,7 +67,7 @@ import { useError } from "@/composables/error";
 const router = useRouter();
 const showNewDialog = ref(false);
 const newTeamTitle = ref(null);
-const emptyMessage = "No Teams Found";
+const emptyMessage = __("No Teams Found");
 
 const newTeam = createResource({
   url: "frappe.client.insert",
@@ -80,7 +80,7 @@ const newTeam = createResource({
     };
   },
   validate(params) {
-    if (isEmpty(params.doc.team_name)) return "Title is required";
+    if (isEmpty(params.doc.team_name)) return __("Title is required");
   },
   auto: false,
   onSuccess() {
@@ -91,12 +91,12 @@ const newTeam = createResource({
       },
     });
   },
-  onError: useError({ title: "Error creating team" }),
+  onError: useError({ title: __("Error creating team") }),
 });
 
 usePageMeta(() => {
   return {
-    title: "Teams",
+    title: __("Teams"),
   };
 });
 

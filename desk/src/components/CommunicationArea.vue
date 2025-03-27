@@ -7,7 +7,7 @@
         <Button
           ref="sendEmailRef"
           variant="ghost"
-          label="Reply"
+          :label="__('Reply')"
           :class="[showEmailBox ? '!bg-gray-300 hover:!bg-gray-200' : '']"
           @click="toggleEmailBox()"
         >
@@ -17,7 +17,7 @@
         </Button>
         <Button
           variant="ghost"
-          label="Comment"
+          :label="__('Comment')"
           :class="[showCommentBox ? '!bg-gray-300 hover:!bg-gray-200' : '']"
           @click="toggleCommentBox()"
         >
@@ -38,7 +38,7 @@
         v-model:attachments="attachments"
         :editable="showCommentBox"
         :doctype="doctype"
-        placeholder="Add a comment..."
+        :placeholder="__('Add a comment...')"
         @submit="
           () => {
             showCommentBox = false;

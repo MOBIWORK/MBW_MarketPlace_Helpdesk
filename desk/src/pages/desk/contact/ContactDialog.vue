@@ -18,7 +18,7 @@
           >
             <template #default="{ uploading, openFileSelector }">
               <Button
-                :label="contact.doc?.image ? 'Change photo' : 'Upload photo'"
+                :label="contact.doc?.image ? __('Change photo') : __('Upload photo')"
                 :loading="uploading"
                 @click="openFileSelector"
               />
@@ -26,7 +26,7 @@
           </FileUploader>
           <Button
             v-if="contact.doc?.image"
-            label="Remove photo"
+            :label="__('Remove photo')"
             @click="updateImage(null)"
           />
         </div>
@@ -40,10 +40,10 @@
             />
           </div>
           <div class="space-y-1">
-            <div class="text-xs">Phone Nos</div>
+            <div class="text-xs">{{__('Phone Nos')}}</div>
             <MultiSelect
               v-model:items="phones"
-              placeholder="+91 98765 43210"
+              :placeholder="__('+91 98765 43210')"
               :validate="validatePhone"
             />
           </div>
@@ -105,7 +105,7 @@ const emails = computed({
   set(newVal) {
     if (newVal.length === 0) {
       createToast({
-        title: "At least one email is required",
+        title: __("At least one email is required"),
         icon: "x",
         iconClasses: "text-red-600",
       });
@@ -148,7 +148,7 @@ const contact = createDocumentResource({
       emit("contactUpdated");
     },
     onError() {
-      useError({ title: "Error updating contact" });
+      useError({ title: __("Error updating contact") });
     },
   },
 });
@@ -157,7 +157,7 @@ const options = computed(() => ({
   title: contact.doc?.name,
   actions: [
     {
-      label: "Save",
+      label: __("Save"),
       theme: "gray",
       variant: "solid",
       onClick: () => update(),
@@ -168,7 +168,7 @@ const options = computed(() => ({
 function update(): void {
   if (!isDirty.value) {
     createToast({
-      title: "No changes to save",
+      title: __("No changes to save"),
       icon: "x",
       iconClasses: "text-red-600",
     });
@@ -213,11 +213,11 @@ function validateFile(file: File): string | void {
   let extn = file.name.split(".").pop().toLowerCase();
   if (!["png", "jpg", "jpeg"].includes(extn)) {
     createToast({
-      title: "Invalid file type, only PNG and JPG images are allowed",
+      title: __("Invalid file type, only PNG and JPG images are allowed"),
       icon: "x",
       iconClasses: "text-red-600",
     });
-    return "Invalid file type, only PNG and JPG images are allowed";
+    return __("Invalid file type, only PNG and JPG images are allowed");
   }
 }
 </script>

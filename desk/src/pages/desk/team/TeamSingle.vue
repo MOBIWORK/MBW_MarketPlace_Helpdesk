@@ -6,7 +6,7 @@
           <Breadcrumbs
             :items="[
               {
-                label: 'Teams',
+                label: __('Teams'),
                 route: {
                   name: AGENT_PORTAL_TEAM_LIST,
                 },
@@ -30,7 +30,7 @@
               </Button>
             </Dropdown>
             <Button
-              label="Add member"
+              :label="__('Add member')"
               theme="gray"
               variant="solid"
               @click="showAddMember = !showAddMember"
@@ -45,7 +45,7 @@
       <div class="m-2 my-4">
         <div class="container">
           <div class="space-y-4">
-            <div class="text-lg font-medium">Members</div>
+            <div class="text-lg font-medium">{{__('Members')}}</div>
             <div v-if="!isEmpty(team.doc?.users)" class="flex flex-wrap gap-2">
               <Pill
                 v-for="member in team.doc?.users"
@@ -56,13 +56,13 @@
               />
             </div>
             <div v-else class="text-base text-gray-900">
-              No members found in team: {{ teamId }}
+              {{__('No members found in team')}}: {{ teamId }}
             </div>
             <Switch
               v-model="ignoreRestrictions"
               size="md"
-              label="Bypass restrictions"
-              description="Members of this team will be able to bypass any team-wise restriction"
+              :label="__('Bypass restrictions')"
+              :description="__('Members of this team will be able to bypass any team-wise restriction')"
               class="rounded border p-4"
             />
           </div>
@@ -74,11 +74,11 @@
         <div class="space-y-2">
           <FormControl
             v-model="title"
-            label="Title"
-            placeholder="Product Experts"
+            :label="__('Title')"
+            :placeholder="__('Product Experts')"
           />
           <Button
-            label="Confirm"
+            :label="('Confirm')"
             theme="gray"
             variant="solid"
             class="w-full"
@@ -95,18 +95,18 @@
           <FormControl
             type="text"
             v-model="query"
-            placeholder="Search agents"
+            :placeholder="__('Search agents')"
             @input="searchMembers()"
           />
           <div v-if="_agents.length === 0">
             <p class="text-base text-gray-600">
-              No agents found, please add
+              {{__('No agents found, please add')}}
               <span
                 class="cursor-pointer underline"
                 @click="router.push('/agents')"
-                >agents</span
+                >{{__('agents')}}</span
               >
-              in the system.
+              {{__('in the system')}}.
             </p>
           </div>
           <div v-else class="flex flex-col gap-4">
@@ -126,7 +126,7 @@
                   :disabled="
                     !!team.doc?.users.find((u) => u.user === agent.user)
                   "
-                  label="Add"
+                  :label="__('Add')"
                   theme="gray"
                   variant="outline"
                   @click="addMember(agent.user)"
@@ -180,7 +180,7 @@ const team = createDocumentResource({
   name: props.teamId,
   auto: true,
   setValue: {
-    onError: useError({ title: "Error updating team" }),
+    onError: useError({ title: __("Error updating team") }),
   },
   delete: {
     onSuccess() {
@@ -188,7 +188,7 @@ const team = createDocumentResource({
         name: AGENT_PORTAL_TEAM_LIST,
       });
     },
-    onError: useError({ title: "Error deleting team" }),
+    onError: useError({ title: __("Error deleting team") }),
   },
 });
 const title = computed({
@@ -212,24 +212,24 @@ const ignoreRestrictions = computed({
 });
 const docOptions = [
   {
-    label: "Rename",
+    label: __("Rename"),
     icon: "edit-3",
     onClick: () => (showRename.value = !showRename.value),
   },
   {
-    label: "Delete",
+    label: __("Delete"),
     icon: "trash-2",
     onClick: () => (showDelete.value = !showDelete.value),
   },
 ];
-const renameDialogOptions = { title: "Rename team" };
-const addMemberDialogOptions = { title: "Add member" };
+const renameDialogOptions = { title: __("Rename team") };
+const addMemberDialogOptions = { title: __("Add member") };
 const deleteDialogOptions = {
-  title: "Delete team",
-  message: `Are you sure you want to delete ${props.teamId}? This action cannot be reversed!`,
+  title: __("Delete team"),
+  message: `${__('Are you sure you want to delete')} ${props.teamId}? ${__('This action cannot be reversed')}!`,
   actions: [
     {
-      label: "Confirm",
+      label: __("Confirm"),
       theme: "red",
       variant: "solid",
       onClick: () => team.delete.submit(),
@@ -248,9 +248,9 @@ function renameTeam() {
       };
     },
     validate(params) {
-      if (!params.new_name) return "New title is required";
+      if (!params.new_name) return __("New title is required");
       if (params.new_name === params.old_name)
-        return "New and old title cannot be same";
+        return __("New and old title cannot be same");
     },
     onSuccess() {
       router.replace({
@@ -260,7 +260,7 @@ function renameTeam() {
         },
       });
     },
-    onError: useError({ title: "Error renaming team" }),
+    onError: useError({ title: __("Error renaming team") }),
   });
 
   r.submit();

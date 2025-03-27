@@ -2,14 +2,14 @@
   <div>
     <Dialog
       v-model="model"
-      :options="{ title: 'Add New Customer', size: 'sm' }"
+      :options="{ title: __('Add New Customer'), size: 'sm' }"
     >
       <template #body-content>
         <div class="space-y-4">
           <div class="space-y-1">
             <Input
               v-model="state.customer"
-              label="Customer Name"
+              :label="__('Customer Name')"
               type="text"
               placeholder="Tesla Inc."
             />
@@ -17,14 +17,14 @@
           <div class="space-y-1">
             <Input
               v-model="state.domain"
-              label="Domain"
+              :label="__('Domain')"
               type="text"
               placeholder="eg: tesla.com, mycompany.com"
             />
           </div>
           <div class="float-right flex space-x-2">
             <Button
-              label="Add"
+              :label="__('Add')"
               theme="gray"
               variant="solid"
               @click.prevent="addCustomer"
@@ -63,7 +63,7 @@ const customerResource = createResource({
     state.customer = "";
     state.domain = "";
     createToast({
-      title: "Customer Created Successfully ",
+      title: __("Customer Created Successfully"),
       icon: "check",
       iconClasses: "text-green-600",
     });
@@ -81,7 +81,7 @@ const customerResource = createResource({
 function addCustomer() {
   if (!state.customer) {
     createToast({
-      title: "Customer Name is required",
+      title: __("Customer Name is required"),
       icon: "x",
       iconClasses: "text-red-600",
     });

@@ -120,7 +120,7 @@
         </div>
         <div class="mt-2 flex items-center justify-end space-x-2 sm:mt-0">
           <Button
-            label="Discard"
+            :label="__('Discard')"
             @click="
               () => {
                 ccEmailsClone = [];

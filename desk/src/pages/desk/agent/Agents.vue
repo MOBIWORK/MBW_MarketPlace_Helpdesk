@@ -2,11 +2,11 @@
   <div class="flex flex-col">
     <LayoutHeader>
       <template #left-header>
-        <div class="text-lg font-medium text-gray-900">Agents</div>
+        <div class="text-lg font-medium text-gray-900">{{__('Agents')}}</div>
       </template>
       <template #right-header>
         <Button
-          label="New agent"
+          :label="__('New agent')"
           theme="gray"
           variant="solid"
           @click="isDialogVisible = !isDialogVisible"
@@ -55,14 +55,14 @@ const options = computed(() => {
       },
     },
     emptyState: {
-      title: "No Agents Found",
+      title: __("No Agents Found"),
     },
   };
 });
 
 usePageMeta(() => {
   return {
-    title: "Agents",
+    title: __("Agents"),
   };
 });
 </script>

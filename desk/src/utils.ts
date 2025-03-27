@@ -25,7 +25,7 @@ export async function copy(s: string) {
   const { copy: c } = useClipboard();
   c(s).then(() =>
     createToast({
-      title: "Copied to clipboard",
+      title: __("Copied to clipboard"),
       icon: "check",
       iconClasses: "text-green-600",
     })
@@ -136,7 +136,7 @@ export async function copyToClipboard(text: string, message?: string) {
     input.remove();
   }
   createToast({
-    title: "Copied to clipboard",
+    title: __("Copied to clipboard"),
     text: message,
     icon: "check",
     iconClasses: "text-green-600",
