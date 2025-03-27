@@ -36,7 +36,7 @@ export const agentPortalSidebarOptions = [
     to: AGENT_PORTAL_TEAM_LIST,
   },
   {
-    label: "Canned responses",
+    label: "Canned Responses",
     icon: LucideCloudLightning,
     to: "CannedResponses",
   },

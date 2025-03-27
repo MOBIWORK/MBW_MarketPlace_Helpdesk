@@ -102,6 +102,7 @@
       :on-click="() => (isExpanded = !isExpanded)"
     />
     <SettingsModal v-model="showSettingsModal" />
+    <ChangeLanguage/>
   </div>
 </template>
 
@@ -133,6 +134,8 @@ import { useView, currentView } from "@/composables/useView";
 import { FrappeCloudIcon } from "@/components/icons";
 import { confirmLoginToFrappeCloud } from "@/composables/fc";
 import { useScreenSize } from "@/composables/screen";
+import ChangeLanguage from '@/components/Settings/ChangeLanguage.vue'
+import { showLanguage } from '@/composables/language'
 const { isMobileView } = useScreenSize();
 
 const route = useRoute();
@@ -238,6 +241,13 @@ const agentPortalDropdown = computed(() => [
     icon: FrappeCloudIcon,
     onClick: () => confirmLoginToFrappeCloud(),
     condition: () => !isMobileView.value && window.is_fc_site,
+  },
+  {
+    icon: "globe",
+    label: __("Language"),
+    onClick: () => {
+      showLanguage.value = true
+    },
   },
   {
     label: __("Settings"),

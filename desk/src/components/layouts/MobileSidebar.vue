@@ -93,6 +93,7 @@
       </TransitionChild>
     </Dialog>
   </TransitionRoot>
+  <ChangeLanguage/>
 </template>
 
 <script setup lang="ts">
@@ -104,6 +105,9 @@ import {
   DialogOverlay,
 } from "@headlessui/vue";
 import { useRouter, useRoute } from "vue-router";
+
+import ChangeLanguage from '@/components/Settings/ChangeLanguage.vue'
+import { showLanguage } from '@/composables/language'
 
 import UserMenu from "@/components/UserMenu.vue";
 import SidebarLink from "@/components/SidebarLink.vue";
@@ -209,6 +213,13 @@ const agentPortalDropdown = computed(() => [
     icon: "book-open",
     label: "Docs",
     onClick: () => window.open("https://docs.frappe.io/helpdesk"),
+  },
+  {
+    icon: "globe",
+    label: __("Language"),
+    onClick: () => {
+      showLanguage.value = true
+    },
   },
   {
     label: "Log out",

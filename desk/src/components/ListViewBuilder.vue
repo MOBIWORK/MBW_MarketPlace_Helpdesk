@@ -149,7 +149,7 @@ import {
   views,
   currentView as headerView,
 } from "@/composables/useView";
-import { getIcon, formatTimeShort } from "@/utils";
+import { getIcon, formatTimeShort, timeAgo } from "@/utils";
 import { useAuthStore } from "@/stores/auth";
 import { useStorage } from "@vueuse/core";
 
@@ -399,7 +399,7 @@ function listCell(column: any, row: any, item: any, idx: number) {
   if (column.type === "Datetime") {
     return h("span", {
       class: "text-p-xs",
-      innerHTML: formatTimeShort(item),
+      innerHTML: timeAgo(item),
     });
   }
   if (column.type === "MultipleAvatar") {
